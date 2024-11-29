@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"wuziyu.site","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wuziyu.site","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta property="og:type" content="website">
 <meta property="og:title" content="Zackary Wu的科学小站">
@@ -104,6 +104,8 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zackary Wu"
+      src="/images/myavatar.jpg">
   <p class="site-author-name" itemprop="name">Zackary Wu</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -111,16 +113,24 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wuziyu0509" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wuziyu0509" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wuziyu0509@gmail.com" title="E-Mail → mailto:wuziyu0509@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
         </div>
       </div>
@@ -142,10 +152,94 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://wuziyu.site/2024/11/29/ML-lecture1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/myavatar.jpg">
+      <meta itemprop="name" content="Zackary Wu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zackary Wu的科学小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Zackary Wu的科学小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/11/29/ML-lecture1/" class="post-title-link" itemprop="url">机器学习（一）：梯度下降</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-11-29 16:30:07 / 修改时间：18:13:49" itemprop="dateCreated datePublished" datetime="2024-11-29T16:30:07+08:00">2024-11-29</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="梯度下降算法">梯度下降算法</h1>
+<h2 id="介绍">介绍</h2>
+<p>在数学中，梯度下降（通常也称为最速下降）是一种一阶迭代优化算法，用于寻找可微函数的局部最小值。
+思路是在函数当前点的梯度（或近似梯度）的反方向重复走几步，因为这是最速下降的方向。
+相反，沿梯度方向步进将导致该函数的局部xxx值；
+这个过程被称为梯度上升。</p>
+<p>梯度下降法一般归因于奥古斯丁-路易斯柯西，他于1847年首先提出它。雅克阿达玛在1907年独立提出了类似的方法。它对非线性优化问题的收敛性质首先由Haskell
+Curry于1944年研究，用该方法 在接下来的几十年中得到越来越多的研究和使用。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/29/ML-lecture1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://wuziyu.site/2024/11/29/physics-around-us-lec1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/myavatar.jpg">
       <meta itemprop="name" content="Zackary Wu">
     </span>
 
@@ -172,7 +266,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-11-29 10:53:31 / 修改时间：15:44:45" itemprop="dateCreated datePublished" datetime="2024-11-29T10:53:31+08:00">2024-11-29</time>
+      <time title="创建时间：2024-11-29 10:53:31 / 修改时间：17:48:47" itemprop="dateCreated datePublished" datetime="2024-11-29T10:53:31+08:00">2024-11-29</time>
     </span>
 
   
@@ -185,75 +279,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="zenos-paradoxes芝诺悖论">Zeno's paradoxes(芝诺悖论)</h2>
+          <h1 id="zenos-paradoxes芝诺悖论">Zeno's paradoxes(芝诺悖论)</h1>
 <p>Zeno's arguments are perhaps the first examples of a method of proof
 called reductio ad absurdum also known as proof by contradiction</p>
-<p>芝诺的论证也许是荒谬归谬法（又称矛盾证明）的第一个例子</p>
-<h2 id="achilles-and-the-tortoise阿喀琉斯与乌龟">Achilles and the
-Tortoise(阿喀琉斯与乌龟)</h2>
-<p><strong>In a race, the quickest runner can never overtake the
-slowest, since the pursuer must first reach the point whence the pursued
-started, so that the slower must always hold a lead.</strong> – as
-recounted by Aristotle.</p>
-<p>In the paradox of Achilles and the Tortoise, Achilles is in a
-footrace with the tortoise. Achilles allows the tortoise a head start of
-100 meters, for example. If we suppose that each racer starts running at
-some constant speed (one very fast and one very slow), then after some
-finite time, Achilles will have run 100 meters, bringing him to the
-tortoise's starting point. During this time, the tortoise has run a much
-shorter distance, say, 10 meters. It will then take Achilles some
-further time to run that distance, by which time the tortoise will have
-advanced farther; and then more time still to reach this third point,
-while the tortoise moves ahead. Thus, whenever Achilles reaches
-somewhere the tortoise has been, he still has farther to go. Therefore,
-because there are an infinite number of points Achilles must reach where
-the tortoise has already been, he can never overtake the tortoise.</p>
-<p>The Achilles and the tortoise paradox was resolved 2000 years later
-after the introduction of the notion of the limit and through the
-summation of an infinite series by employing the mathematical techniques
-developed by Cauchy, Weierstrass, Dedekind and Cantor.</p>
-<p>2000
-年后，随着极限概念的引入，以及利用柯西、魏尔斯特拉斯、戴德金和康托尔开发的数学技术对无穷级数求和，阿基里斯与乌龟悖论得以解决。</p>
-<img src="/2024/11/29/physics-around-us-lec1/Achilles.png" class="">
-<h2 id="dichotomy-paradox二分法悖论">Dichotomy paradox(二分法悖论)</h2>
-<p><strong>That which is in locomotion must arrive at the half-way stage
-before it arrives at the goal</strong>– as recounted by Aristotle.</p>
-<p>Suppose Homer wants to catch a stationary bus. Before he can get
-there, he must get halfway there. Before he can get halfway there, he
-must get a quarter of the way there. Before traveling a quarter, he must
-travel one-eighth; before an eighth, one-sixteenth; and so on.</p>
-<p>This description requires one to complete an infinite number of
-tasks, which Zeno maintains is an impossibility.</p>
-<p>This sequence also presents a second problem in that it contains no
-first distance to run, for any possible (finite) first distance could be
-divided in half, and hence would not be first after all. Hence, the trip
-cannot even begin. The paradoxical conclusion then would be that travel
-over any finite distance can neither be completed nor begun, and so all
-motion must be an illusion.</p>
-<p>正如亚里士多德所言，<strong>运动中的事物必须先到达半程，才能到达目的地。</strong></p>
-<p>假设荷马想赶上一辆固定的公共汽车。在到达目的地之前，他必须先走到半路。在走到一半之前，他必须走四分之一的路程。在走完四分之一的路程之前，他必须走完八分之一的路程；在走完八分之一的路程之前，他必须走完十六分之一的路程；以此类推。</p>
-<p>这种描述要求一个人完成无限多的任务，芝诺认为这是不可能的。</p>
-<p>这个序列还提出了第二个问题，即它不包含第一段要跑的距离，因为任何可能的（有限的）第一段距离都可能被分成两半，因此终究不是第一段。因此，旅行根本无法开始。那么，矛盾的结论就是，任何有限距离的旅行既不能完成，也不能开始，因此所有的运动都必须是一种幻觉。</p>
-<h2 id="arrow-paradox飞矢不动">Arrow paradox(飞矢不动)</h2>
-<p><strong>If everything when it occupies an equal space is at rest, and
-if that which is in locomotion is always occupying such a space at any
-moment, the flying arrow is therefore motionless.</strong> – as
-recounted by Aristotle</p>
-<p>In the arrow paradox Zeno states that for motion to occur, an object
-must change the position which it occupies. He gives an example of an
-arrow in flight. He states that in any one (duration-less) instant of
-time, the arrow is neither moving to where it is, nor to where it is
-not. It cannot move to where it is not, because no time elapses for it
-to move there; it cannot move to where it is, because it is already
-there. In other words, at every instant of time there is no motion
-occurring. If everything is motionless at every instant, and time is
-entirely composed of instants, then motion is impossible.</p>
-<p>Whereas the previous paradoxes divide space, this paradox starts by
-dividing time—and not into segments, but into points.</p>
-<p>芝诺在 “飞矢不动悖论
-”中指出，要发生运动，物体必须改变其所处的位置。他举了一个飞行中的箭的例子。他指出，在任何一个（无持续时间）瞬间，箭既没有移动到它所在的位置，也没有移动到它不在的位置。它不可能移动到它不在的地方，因为没有时间让它移动到那里；它也不可能移动到它在的地方，因为它已经在那里了。换句话说，在时间的每一瞬间，都没有运动发生。如果万物在每一瞬间都是静止的，时间完全由瞬间组成，那么运动就是不可能的。</p>
-<p>之前的悖论是划分空间，而这个悖论则是从划分时间开始--不是划分成段，而是划分成点。</p>
-
+<p>芝诺的论证也许是荒谬归谬法（又称矛盾证明）的第一个例子
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/29/physics-around-us-lec1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -278,6 +315,8 @@ dividing time—and not into segments, but into points.</p>
   <footer class="footer">
     <div class="footer-inner">
 
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">陕ICP备2024026567号-2 </a>
+  </div>
   <div class="copyright">
     &copy; 
     <span itemprop="copyrightYear">2024</span>
@@ -286,7 +325,7 @@ dividing time—and not into segments, but into points.</p>
     </span>
     <span class="author" itemprop="copyrightHolder">Zackary Wu</span>
   </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
     </div>
@@ -303,6 +342,9 @@ dividing time—and not into segments, but into points.</p>
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
   </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/wuziyu0509" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>

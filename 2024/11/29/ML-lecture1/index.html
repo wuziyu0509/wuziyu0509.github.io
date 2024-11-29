@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wuziyu.site","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="梯度下降算法 介绍 在数学中，梯度下降（通常也称为最速下降）是一种一阶迭代优化算法，用于寻找可微函数的局部最小值。 思路是在函数当前点的梯度（或近似梯度）的反方向重复走几步，因为这是最速下降的方向。 相反，沿梯度方向步进将导致该函数的局部xxx值； 这个过程被称为梯度上升。 梯度下降法一般归因于奥古斯丁-路易斯柯西，他于1847年首先提出它。雅克阿达玛在1907年独立提出了类似的方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习（一）：梯度下降">
+<meta property="og:url" content="https://wuziyu.site/2024/11/29/ML-lecture1/index.html">
+<meta property="og:site_name" content="Zackary Wu的科学小站">
+<meta property="og:description" content="梯度下降算法 介绍 在数学中，梯度下降（通常也称为最速下降）是一种一阶迭代优化算法，用于寻找可微函数的局部最小值。 思路是在函数当前点的梯度（或近似梯度）的反方向重复走几步，因为这是最速下降的方向。 相反，沿梯度方向步进将导致该函数的局部xxx值； 这个过程被称为梯度上升。 梯度下降法一般归因于奥古斯丁-路易斯柯西，他于1847年首先提出它。雅克阿达玛在1907年独立提出了类似的方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-29T08:30:07.000Z">
+<meta property="article:modified_time" content="2024-11-29T10:13:49.539Z">
+<meta property="article:author" content="Zackary Wu">
+<meta property="article:tag" content="lecture notes">
+<meta property="article:tag" content="Machine Learning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wuziyu.site/2024/11/29/ML-lecture1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wuziyu.site/2024/11/29/ML-lecture1/","path":"2024/11/29/ML-lecture1/","title":"机器学习（一）：梯度下降"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>机器学习（一）：梯度下降 | Zackary Wu的科学小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Zackary Wu的科学小站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%AE%97%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">梯度下降算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BE%E4%BE%8B%E7%94%A8%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E6%B1%82%E8%A7%A3sqrt49"><span class="nav-number">2.</span> <span class="nav-text">举例：用梯度下降法求解\(\sqrt[4]{9}\)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E5%88%86%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">理论分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A2%E7%B4%A2%E5%AD%A6%E4%B9%A0%E7%8E%87alpha%E4%BB%A5%E5%8F%8A%E8%BF%AD%E4%BB%A3%E5%88%9D%E5%A7%8B%E5%80%BC%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">2.3.</span> <span class="nav-text">探索学习率\(\alpha\)以及迭代初始值对结果的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A2%E7%B4%A2%E8%BF%AD%E4%BB%A3%E5%88%9D%E5%A7%8B%E5%80%BC%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E5%BD%B1%E5%93%8D%E6%8E%A7%E5%88%B6%E8%BF%AD%E4%BB%A3%E6%AC%A1%E6%95%B0%E4%B8%BA20000%E5%AD%A6%E4%B9%A0%E7%8E%87%E4%B8%BAalpha10-5"><span class="nav-number">2.3.1.</span> <span class="nav-text">探索迭代初始值对结果的影响(控制迭代次数为20000，学习率为\(\alpha&#x3D;10^{-5}\))</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A2%E7%B4%A2%E6%9C%80%E9%80%82%E5%90%88%E7%9A%84%E8%BF%AD%E4%BB%A3%E5%88%9D%E5%A7%8B%E5%80%BC%E5%9B%BA%E5%AE%9Aalpha10-5%E8%BF%AD%E4%BB%A3%E6%AC%A1%E6%95%B0%E4%B8%BA20000"><span class="nav-number">2.3.2.</span> <span class="nav-text">探索最适合的迭代初始值(固定\(\alpha&#x3D;10^{-5}\)，迭代次数为20000)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A2%E7%B4%A2alpha%E5%AF%B9%E7%BB%93%E6%9E%9C%E7%9A%84%E5%BD%B1%E5%93%8D%E6%8E%A7%E5%88%B6%E8%BF%AD%E4%BB%A3%E6%AC%A1%E6%95%B0%E4%B8%BA20000%E8%BF%AD%E4%BB%A3%E5%88%9D%E5%A7%8B%E5%80%BC%E4%B8%BA5.00"><span class="nav-number">2.3.3.</span> <span class="nav-text">探索\(\alpha\)对结果的影响(控制迭代次数为20000，迭代初始值为5.00)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E8%A1%8C%E7%BD%91%E6%A0%BC%E6%90%9C%E7%B4%A2%E6%8E%A2%E7%B4%A2%E6%9C%80%E9%80%82%E5%90%88%E7%9A%84alpha%E5%9B%BA%E5%AE%9A%E8%BF%AD%E4%BB%A3%E5%88%9D%E5%A7%8B%E5%80%BC%E4%B8%BA520000%E6%AC%A1%E8%BF%AD%E4%BB%A3"><span class="nav-number">2.3.4.</span> <span class="nav-text">进行网格搜索，探索最适合的\(\alpha\)(固定迭代初始值为5，20000次迭代)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-1"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A9%E7%94%A8-python-%E5%BA%93-scipy.optimize-%E6%8E%A2%E7%B4%A2%E5%85%B6%E5%AE%83%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E5%8F%AF%E9%80%89%E9%99%A4%E4%BA%86%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%96%B9%E6%B3%95%E8%BF%98%E6%9C%89-bfgsh%E7%AD%89%E6%96%B9%E6%B3%95%E5%B0%9D%E8%AF%95%E4%BA%86%E8%A7%A3%E5%B9%B6%E4%BD%BF%E7%94%A8%E5%AE%83%E4%BB%AC"><span class="nav-number">3.</span> <span class="nav-text">利用
+python 库 scipy.optimize
+探索其它优化方法（可选）。除了梯度下降方法，还有
+BFGSh等方法，尝试了解并使用它们。</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bfgs%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">BFGS算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">3.1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.2.</span> <span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scipy.optimize%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">scipy.optimize代码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zackary Wu"
+      src="/images/myavatar.jpg">
+  <p class="site-author-name" itemprop="name">Zackary Wu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wuziyu0509" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wuziyu0509" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wuziyu0509@gmail.com" title="E-Mail → mailto:wuziyu0509@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wuziyu.site/2024/11/29/ML-lecture1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/myavatar.jpg">
+      <meta itemprop="name" content="Zackary Wu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zackary Wu的科学小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="机器学习（一）：梯度下降 | Zackary Wu的科学小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          机器学习（一）：梯度下降
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-11-29 16:30:07 / 修改时间：18:13:49" itemprop="dateCreated datePublished" datetime="2024-11-29T16:30:07+08:00">2024-11-29</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="梯度下降算法">梯度下降算法</h1>
+<h2 id="介绍">介绍</h2>
+<p>在数学中，梯度下降（通常也称为最速下降）是一种一阶迭代优化算法，用于寻找可微函数的局部最小值。
+思路是在函数当前点的梯度（或近似梯度）的反方向重复走几步，因为这是最速下降的方向。
+相反，沿梯度方向步进将导致该函数的局部xxx值；
+这个过程被称为梯度上升。</p>
+<p>梯度下降法一般归因于奥古斯丁-路易斯柯西，他于1847年首先提出它。雅克阿达玛在1907年独立提出了类似的方法。它对非线性优化问题的收敛性质首先由Haskell
+Curry于1944年研究，用该方法 在接下来的几十年中得到越来越多的研究和使用。
+<span id="more"></span> ## 基本原理 梯度下降方法基于以下的观察：如果实值函数<span
+class="math inline">\({F(\vec{x})}\)</span>在点<span
+class="math inline">\({\vec{a}}\)</span>可微且有定义，那么函数<span
+class="math inline">\({F(\vec{x})}\)</span>在<span
+class="math inline">\({\vec{a}}\)</span>点沿着梯度相反的方向<span
+class="math inline">\({-\nabla{F(\vec{a})}}\)</span>下降最多。
+因而，如果 <span
+class="math display">\[{\mathbf  {b}}={\mathbf  {a}}-\gamma \nabla
+F({\mathbf  {a}})\]</span> 对于一个足够小数值<span
+class="math inline">\({\gamma&gt;0}\)</span>时成立，那么<span
+class="math inline">\({F({\mathbf  {a}})\geq
+F({\mathbf  {b}})}\)</span>。<br />
+考虑到这一点，我们可以从函数F的局部极小值的初始估计<span
+class="math inline">\(x_0\)</span>出发，并考虑如下序列${}<em>{0},{}</em>{1},{}<em>{2},<span
+class="math inline">\(,使得\)</span><span
+class="math inline">\(\mathbf{x}_{n+1}=\mathbf{x}_n-\gamma_n \nabla
+F(\mathbf{x}_n),\ n \ge 0。\)</span>$
+因此可得到$F({}</em>{0})F({}<em>{1})F({}</em>{2})<span
+class="math inline">\(,
+如果顺利的话序列\)</span>({}_{n})<span
+class="math inline">\(收敛到期望的局部极小值。注意每次迭代步长\)</span>$可以改变。</p>
+<h1 id="举例用梯度下降法求解sqrt49">举例：用梯度下降法求解<span
+class="math inline">\(\sqrt[4]{9}\)</span></h1>
+<h2 id="理论分析">理论分析</h2>
+<p>令<span class="math inline">\(x =
+\sqrt[4]{9}\)</span>，问题即转化求解<span class="math inline">\(f(x) =
+x^{4} -9\)</span>的零点
+由于开方运算得到的值具有非负性，因此只需讨论<span
+class="math inline">\(x&gt;0\)</span>的情况即可。<br> 定义损失函数：
+<span class="math display">\[ L(x) = \frac{1}{2}(f(x)-0)^2 \]</span>
+对L(x)求导，得: <span class="math display">\[ \frac{dL}{dx} = 4x^3 (x^4
+- 9) \]</span></p>
+<h2 id="代码实现">代码实现</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x</span>):<span class="comment">#定义函数</span></span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">L</span>(<span class="params">x</span>):<span class="comment">#定义损失函数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.5</span>*(f(x)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">slope_L</span>(<span class="params">x</span>):<span class="comment">#定义导函数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span>*(x**<span class="number">3</span>)*(x**<span class="number">4</span> - <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GD</span>():   <span class="comment">#梯度下降法</span></span><br><span class="line">    alpha = <span class="number">10</span>**(-<span class="number">5</span>)</span><br><span class="line">    maxTimes = <span class="number">20000</span></span><br><span class="line">    x = <span class="number">5.00</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(maxTimes):</span><br><span class="line">        x = x - slope_L(x)*alpha</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line"></span><br><span class="line">GD()</span><br></pre></td></tr></table></figure>
+<h2 id="探索学习率alpha以及迭代初始值对结果的影响">探索学习率<span
+class="math inline">\(\alpha\)</span>以及迭代初始值对结果的影响</h2>
+<h3
+id="探索迭代初始值对结果的影响控制迭代次数为20000学习率为alpha10-5">探索迭代初始值对结果的影响(控制迭代次数为20000，学习率为<span
+class="math inline">\(\alpha=10^{-5}\)</span>)</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.5</span> * (f(x)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义导数（梯度）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">slope_L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span> * (x**<span class="number">3</span>) * (x**<span class="number">4</span> - <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 梯度下降法</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GD</span>(<span class="params">alpha, x_init, max_times</span>):</span><br><span class="line">    x = x_init</span><br><span class="line">    costs = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_times):</span><br><span class="line">        cost = L(x)</span><br><span class="line">        costs.append(cost)</span><br><span class="line">        x = x - slope_L(x) * alpha</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#if len(costs) &gt; 1 and np.abs(costs[-1] - costs[-2]) &lt; 1e-9:</span></span><br><span class="line">            <span class="comment">#break</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">if</span> np.<span class="built_in">abs</span>(costs[i]) &lt; <span class="number">1e-23</span>:</span><br><span class="line">            <span class="keyword">break</span>    </span><br><span class="line">    <span class="keyword">return</span> x, costs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制学习曲线</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_learning_process</span>(<span class="params">initial_values, alpha, max_times</span>):</span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> x_init <span class="keyword">in</span> initial_values:</span><br><span class="line">        x, costs = GD(alpha, x_init, max_times)</span><br><span class="line">        plt.plot(costs, label=<span class="string">f&#x27;x_init=<span class="subst">&#123;x_init&#125;</span>&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    plt.yscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Iterations&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Cost function&#x27;</span>)</span><br><span class="line">    plt.title(<span class="string">f&#x27;Cost function vs Iterations for different initial values (α=<span class="subst">&#123;alpha&#125;</span>)&#x27;</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.grid(<span class="literal">True</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试不同的初始值</span></span><br><span class="line">initial_values = [<span class="number">1.0</span>, <span class="number">2</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>]</span><br><span class="line">plot_learning_process(initial_values, <span class="number">1e-5</span>,<span class="number">20000</span>)</span><br></pre></td></tr></table></figure>
+
+<h3
+id="探索最适合的迭代初始值固定alpha10-5迭代次数为20000">探索最适合的迭代初始值(固定<span
+class="math inline">\(\alpha=10^{-5}\)</span>，迭代次数为20000)</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.5</span> * (f(x)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义导数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">slope_L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span> * (x**<span class="number">3</span>) * (x**<span class="number">4</span> - <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 梯度下降法</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GD</span>(<span class="params">alpha, x_init, max_times</span>):</span><br><span class="line">    x = x_init</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_times):</span><br><span class="line">        x = x - slope_L(x) * alpha</span><br><span class="line">    <span class="keyword">return</span> L(x)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制 alpha 与最终 cost 的关系</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_alpha_vs_cost</span>(<span class="params">x_init_range, alpha, max_times</span>):</span><br><span class="line">    costs = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> x_init <span class="keyword">in</span> x_init_range:</span><br><span class="line">        final_cost = GD(alpha, x_init, max_times)</span><br><span class="line">        costs.append(final_cost)</span><br><span class="line">    </span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span><br><span class="line">    plt.plot(x_init_range, costs, marker=<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">    <span class="comment">#plt.xscale(&#x27;log&#x27;)</span></span><br><span class="line">    plt.yscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;x(Initial guess)&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Final Cost after 20000 iterations&#x27;</span>)</span><br><span class="line">    plt.title(<span class="string">&#x27;Final Cost vs Initial guess&#x27;</span>)</span><br><span class="line">    plt.grid(<span class="literal">True</span>)</span><br><span class="line">    plt.show()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 获取最小值</span></span><br><span class="line">    min_value = <span class="built_in">min</span>(costs)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取最小值的索引</span></span><br><span class="line">    min_index = costs.index(min_value)</span><br><span class="line">    </span><br><span class="line">    best_x_init = x_init_range[min_index]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;最好的迭代初始值:&quot;</span>, best_x_init)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成alpha从10^-9到10^-5的连续变化</span></span><br><span class="line">x_init_range = np.linspace(<span class="number">1</span>, <span class="number">6</span>, <span class="number">50</span>)</span><br><span class="line">plot_alpha_vs_cost(x_init_range, <span class="number">10</span>**(-<span class="number">6</span>), <span class="number">20000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最好的迭代初始值: 1.7142857142857144</p>
+<h4 id="结论">结论</h4>
+<p>对先减小再增大的定性分析:<br>
+越接近9的四次方根收敛得将会越快，越远离，收敛得越慢。<br>
+显然，当迭代初始值越接近9的四次方根，迭代的效果越好</p>
+<h3
+id="探索alpha对结果的影响控制迭代次数为20000迭代初始值为5.00">探索<span
+class="math inline">\(\alpha\)</span>对结果的影响(控制迭代次数为20000，迭代初始值为5.00)</h3>
+<p>选择迭代初始值为5的原因是：上面画图可得，3-5收敛速度比较平稳，不快不慢，容易体现<span
+class="math inline">\(\alpha\)</span>的作用。 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.5</span> * (f(x)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义导数（梯度）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">slope_L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span> * (x**<span class="number">3</span>) * (x**<span class="number">4</span> - <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 梯度下降法</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GD</span>(<span class="params">alpha, x_init, max_times</span>):</span><br><span class="line">    x = x_init</span><br><span class="line">    costs = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_times):</span><br><span class="line">        cost = L(x)</span><br><span class="line">        costs.append(cost)</span><br><span class="line">        x = x - slope_L(x) * alpha</span><br><span class="line">        <span class="comment"># 如果损失函数变化很小，提前终止迭代</span></span><br><span class="line">        <span class="comment">#if len(costs) &gt; 1 and np.abs(costs[-1] - costs[-2]) &lt; 1e-15:</span></span><br><span class="line">            <span class="comment">#break</span></span><br><span class="line">        <span class="keyword">if</span> np.<span class="built_in">abs</span>(costs[i]) &lt; <span class="number">1e-23</span>:</span><br><span class="line">            <span class="keyword">break</span>    </span><br><span class="line">    <span class="keyword">return</span> x, costs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制学习曲线</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_learning_process</span>(<span class="params">alphas, x_init, max_times</span>):</span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> alpha <span class="keyword">in</span> alphas:</span><br><span class="line">        x, costs = GD(alpha, x_init, max_times)</span><br><span class="line">        plt.plot(costs, label=<span class="string">f&#x27;α=<span class="subst">&#123;alpha&#125;</span>&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    plt.yscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Iterations&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Cost function&#x27;</span>)</span><br><span class="line">    plt.title(<span class="string">&#x27;Cost function vs Iterations for different α values&#x27;</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.grid(<span class="literal">True</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试不同的 α</span></span><br><span class="line">alphas = [<span class="number">10</span>**(-<span class="number">5</span>),<span class="number">10</span>**(-<span class="number">6</span>),<span class="number">10</span>**(-<span class="number">7</span>),<span class="number">10</span>**(-<span class="number">4.5</span>),<span class="number">10</span>**(-<span class="number">4.49</span>)]</span><br><span class="line">plot_learning_process(alphas, <span class="number">5</span>, <span class="number">20000</span>)</span><br></pre></td></tr></table></figure>
+</p>
+<h3
+id="进行网格搜索探索最适合的alpha固定迭代初始值为520000次迭代">进行网格搜索，探索最适合的<span
+class="math inline">\(\alpha\)</span>(固定迭代初始值为5，20000次迭代)</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.5</span> * (f(x)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义导数（梯度）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">slope_L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">4</span> * (x**<span class="number">3</span>) * (x**<span class="number">4</span> - <span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 梯度下降法</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">GD</span>(<span class="params">alpha, x_init, max_times</span>):</span><br><span class="line">    x = x_init</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_times):</span><br><span class="line">        x = x - slope_L(x) * alpha</span><br><span class="line">    <span class="keyword">return</span> L(x)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制 alpha 与最终 cost 的关系</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">plot_alpha_vs_cost</span>(<span class="params">alpha_range, x_init, max_times</span>):</span><br><span class="line">    costs = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> alpha <span class="keyword">in</span> alpha_range:</span><br><span class="line">        final_cost = GD(alpha, x_init, max_times)</span><br><span class="line">        costs.append(final_cost)</span><br><span class="line">    </span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span><br><span class="line">    plt.plot(alpha_range, costs, marker=<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">    plt.xscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">    plt.yscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;Alpha (Learning rate)&#x27;</span>)</span><br><span class="line">    plt.ylabel(<span class="string">&#x27;Final Cost after 20000 iterations&#x27;</span>)</span><br><span class="line">    plt.title(<span class="string">&#x27;Final Cost vs Alpha&#x27;</span>)</span><br><span class="line">    plt.grid(<span class="literal">True</span>)</span><br><span class="line">    plt.show()</span><br><span class="line">    </span><br><span class="line">     <span class="comment"># 获取最小值</span></span><br><span class="line">    min_value = <span class="built_in">min</span>(costs)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取最小值的索引</span></span><br><span class="line">    min_index = costs.index(min_value)</span><br><span class="line">    </span><br><span class="line">    best_alpha = alpha_range[min_index]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;最好的alpha:&quot;</span>, best_alpha)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成alpha从10^-9到10^-5的连续变化</span></span><br><span class="line">alpha_range = np.logspace(-<span class="number">9</span>, -<span class="number">4.8</span>, <span class="number">100</span>)</span><br><span class="line">plot_alpha_vs_cost(alpha_range, <span class="number">5.0</span>, <span class="number">20000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最好的alpha: 1.4373937679631066e-05</p>
+<h4 id="结论-1">结论</h4>
+<p>先减小后增大的原因：</p>
+<p><span
+class="math inline">\(\alpha\)</span>是学习步长，我们的优化空间是一个凹凸不平的面。如果步长太大，就永远走不到合适的坑里，会在山峰间跳来跳去，直到发散；如果步长太小，收敛则会太慢。</p>
+<p>最好的<span class="math inline">\(\alpha\)</span>在<span
+class="math inline">\(1.43*10^{-5}\)</span>左右。</p>
+<h1
+id="利用-python-库-scipy.optimize-探索其它优化方法可选除了梯度下降方法还有-bfgsh等方法尝试了解并使用它们">利用
+python 库 scipy.optimize
+探索其它优化方法（可选）。除了梯度下降方法，还有
+BFGSh等方法，尝试了解并使用它们。</h1>
+<h2 id="bfgs算法">BFGS算法</h2>
+<p>引用自维基百科<a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/BFGS%E7%AE%97%E6%B3%95">BFGS算法</a></p>
+<h3 id="简介">简介</h3>
+<blockquote>
+<p>在数值优化中，<strong>Broyden–Fletcher–Goldfarb–Shanno
+(BFGS)</strong>
+算法是一种求解无约束非线性优化问题的迭代算法。和相关的Davidon–Fletcher–Powell算法类似，BFGS算法通过利用曲率信息对梯度进行预处理来确定下降方向。曲率信息则是通过维护一个使用广义的割线法逐步近似的关于损失函数的Hessian矩阵来获得。</p>
+</blockquote>
+<h3 id="算法">算法</h3>
+<blockquote>
+<p>从起始点 <span class="math inline">\(x_0\)</span> 和初始的 Hessian
+矩阵 <span class="math inline">\(B_0\)</span>，重复以下步骤，<span
+class="math inline">\(x_k\)</span> 会收敛到优化问题的解：</p>
+</blockquote>
+<blockquote>
+<ol type="1">
+<li>通过求解方程 <span class="math inline">\(B_k p_k = -\nabla
+f(x_k)\)</span>，获得下降方向 <span
+class="math inline">\(p_k\)</span>。</li>
+<li>在 <span class="math inline">\(p_k\)</span>
+方向上进行一维的优化（线搜索），找到合适的步长 <span
+class="math inline">\(\alpha_k\)</span>。如果这个搜索是完全的，则 <span
+class="math display">\[
+\alpha_k = \arg\min f(x_k + \alpha p_k)
+\]</span> 在实际应用中，不完全的搜索一般就足够了，此时只要求 <span
+class="math inline">\(\alpha_k\)</span> 满足 Wolfe 条件。</li>
+<li>令 <span class="math inline">\(s_k = \alpha_k p_k\)</span>，并且令
+<span class="math inline">\(x_{k+1} = x_k + s_k\)</span>。</li>
+<li><span class="math inline">\(y_k = \nabla f(x_{k+1}) - \nabla
+f(x_k)\)</span>。</li>
+<li><span class="math inline">\(B_{k+1} = B_k + \frac{y_k y_k^T}{y_k^T
+s_k} - \frac{B_k s_k s_k^T B_k^T}{s_k^T B_k s_k}\)</span></li>
+</ol>
+</blockquote>
+<blockquote>
+<p>函数 <span class="math inline">\(f(x)\)</span>
+表示要最小化的目标函数。可以通过检查梯度的范数 <span
+class="math inline">\(||\nabla f(x_k)||\)</span> 来判断收敛性。如果
+<span class="math inline">\(B_0\)</span> 初始化为 <span
+class="math inline">\(B_0 =
+I\)</span>，第一步将等效于梯度下降，接下来的步骤会受到近似 Hessian 矩阵
+<span class="math inline">\(B_k\)</span> 的调节。</p>
+</blockquote>
+<h2 id="scipy.optimize代码实现">scipy.optimize代码实现</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">f</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x**<span class="number">4</span> - <span class="number">9</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">L</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.5</span> * (f(x)**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用BFGS算法求解最小值</span></span><br><span class="line">result = minimize(L, x0=<span class="number">1.0</span>, method=<span class="string">&#x27;BFGS&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;最小值对应的 x:&quot;</span>, result.x)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;最小值:&quot;</span>, result.fun)</span><br></pre></td></tr></table></figure>
+<p>最小值对应的 x: [1.73205081]<br> 最小值: 1.9635447486648619e-19</p>
+<h2 id="参考资料">参考资料</h2>
+<p>[1]菜鸟编程 python 教程 <a
+target="_blank" rel="noopener" href="https://www.runoob.com/python/python-tutorial.html"
+class="uri">https://www.runoob.com/python/python-tutorial.html</a><br />
+[2]菜鸟教程-numpy教程 <a
+target="_blank" rel="noopener" href="https://www.runoob.com/numpy/numpy-tutorial.html"
+class="uri">https://www.runoob.com/numpy/numpy-tutorial.html</a><br />
+[3]菜鸟教程-matplotlib教程 <a
+target="_blank" rel="noopener" href="https://www.runoob.com/matplotlib/matplotlib-tutorial.html"
+class="uri">https://www.runoob.com/matplotlib/matplotlib-tutorial.html</a>
+<br> [4]BFGS算法 <a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/BFGS%E7%AE%97%E6%B3%95"
+class="uri">https://zh.wikipedia.org/wiki/BFGS%E7%AE%97%E6%B3%95</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="https://cdn.luogu.com.cn/upload/image_hosting/pamuszx7.png" alt="Zackary Wu 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="https://cdn.luogu.com.cn/upload/image_hosting/arr9pveb.png" alt="Zackary Wu 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/lecture-notes/" rel="tag"># lecture notes</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/11/29/physics-around-us-lec1/" rel="prev" title="Physics around us Lecture 1:From Zeno's "Achill and the Tortoise" paradoxes to Newtonian mechanics and classical physics!">
+                  <i class="fa fa-angle-left"></i> Physics around us Lecture 1:From Zeno's "Achill and the Tortoise" paradoxes to Newtonian mechanics and classical physics!
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">陕ICP备2024026567号-2 </a>
+  </div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zackary Wu</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/wuziyu0509" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"wuziyu0509","repo":"my-blog-comment","client_id":"Ov23lioPvNu02fRGVVkt","client_secret":"4df54a0fcef73eaa690ff4586325bc742cc43cef","admin_user":"wuziyu0509","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"019987e247e8cb2ffb5dc3e785f0d1c6"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
